@@ -1,0 +1,728 @@
+{
+  "info": {
+    "name": "Charity Inventory Management System",
+    "description": "Full backend API. Run **Auth > Login (admin)** first: it stores the JWT in the `token` collection variable, which every other request sends automatically.\n\nNo real credentials are stored here — set `adminEmail`/`adminPassword` in your environment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" },
+    { "key": "adminEmail", "value": "admin@example.com" },
+    { "key": "adminPassword", "value": "" },
+    { "key": "categoryId", "value": "" },
+    { "key": "itemId", "value": "" },
+    { "key": "donorId", "value": "" },
+    { "key": "donationId", "value": "" },
+    { "key": "beneficiaryId", "value": "" },
+    { "key": "distributionId", "value": "" },
+    { "key": "distributionItemId", "value": "" },
+    { "key": "volunteerId", "value": "" },
+    { "key": "taskId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('login succeeded', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('token', body.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Register user",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Inventory Staff\",\n  \"email\": \"staff@example.com\",\n  \"password\": \"ChangeMe@123\",\n  \"role\": \"INVENTORY_STAFF\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Health check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Current user",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/users/me", "host": ["{{baseUrl}}"], "path": ["api", "users", "me"] } }
+        },
+        {
+          "name": "List users",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users?search=&role=&status=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "users"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "role", "value": "", "description": "ADMIN | INVENTORY_STAFF | VOLUNTEER" },
+                { "key": "status", "value": "", "description": "ACTIVE | INACTIVE" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Change role",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"role\": \"INVENTORY_STAFF\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/users/2/role", "host": ["{{baseUrl}}"], "path": ["api", "users", "2", "role"] }
+          }
+        },
+        {
+          "name": "Change status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"INACTIVE\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/users/2/status", "host": ["{{baseUrl}}"], "path": ["api", "users", "2", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create category",
+          "event": [
+            {
+              "listen": "test",
+              "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('categoryId', pm.response.json().data.id);"] }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Food\",\n  \"description\": \"Dry rations and staples\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/categories", "host": ["{{baseUrl}}"], "path": ["api", "categories"] }
+          }
+        },
+        {
+          "name": "List categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/categories?search=&status=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "categories"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "status", "value": "", "description": "ACTIVE | INACTIVE" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get category",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/categories/{{categoryId}}", "host": ["{{baseUrl}}"], "path": ["api", "categories", "{{categoryId}}"] } }
+        },
+        {
+          "name": "Update category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Food\",\n  \"description\": \"Dry rations, staples and tinned goods\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/categories/{{categoryId}}", "host": ["{{baseUrl}}"], "path": ["api", "categories", "{{categoryId}}"] }
+          }
+        },
+        {
+          "name": "Change category status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"INACTIVE\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/categories/{{categoryId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "categories", "{{categoryId}}", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "item": [
+        {
+          "name": "Create item",
+          "event": [
+            {
+              "listen": "test",
+              "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('itemId', pm.response.json().data.id);"] }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemName\": \"Rice\",\n  \"categoryId\": {{categoryId}},\n  \"description\": \"5kg bags\",\n  \"quantity\": 100,\n  \"unit\": \"KG\",\n  \"minimumStockLevel\": 20,\n  \"expiryDate\": \"2027-01-01\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/inventory", "host": ["{{baseUrl}}"], "path": ["api", "inventory"] }
+          }
+        },
+        {
+          "name": "Search inventory",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory?search=&categoryId=&status=&expiryStatus=&page=0&size=20&sort=itemName",
+              "host": ["{{baseUrl}}"], "path": ["api", "inventory"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "categoryId", "value": "" },
+                { "key": "status", "value": "", "description": "IN_STOCK | LOW_STOCK | OUT_OF_STOCK | EXPIRED" },
+                { "key": "expiryStatus", "value": "", "description": "EXPIRED | EXPIRING_7_DAYS | EXPIRING_30_DAYS | NO_EXPIRY" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "sort", "value": "itemName" }
+              ]
+            }
+          }
+        },
+        { "name": "Get item", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/inventory/{{itemId}}", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "{{itemId}}"] } } },
+        {
+          "name": "Update item",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"itemName\": \"Basmati Rice\",\n  \"categoryId\": {{categoryId}},\n  \"unit\": \"KG\",\n  \"minimumStockLevel\": 25\n}" },
+            "url": { "raw": "{{baseUrl}}/api/inventory/{{itemId}}", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "{{itemId}}"] }
+          }
+        },
+        {
+          "name": "Adjust stock",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"adjustment\": -10,\n  \"transactionType\": \"MANUAL_ADJUSTMENT\",\n  \"notes\": \"Damaged in transit\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/inventory/{{itemId}}/adjust-stock", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "{{itemId}}", "adjust-stock"] }
+          }
+        },
+        { "name": "Item ledger", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/inventory/{{itemId}}/transactions", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "{{itemId}}", "transactions"] } } },
+        { "name": "Low stock", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/inventory/low-stock", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "low-stock"] } } },
+        { "name": "Out of stock", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/inventory/out-of-stock", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "out-of-stock"] } } },
+        { "name": "Expired", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/inventory/expired", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "expired"] } } },
+        { "name": "Expiring soon", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/inventory/expiring-soon?days=30", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "expiring-soon"], "query": [{ "key": "days", "value": "30" }] } } },
+        { "name": "Archive item", "request": { "method": "DELETE", "url": { "raw": "{{baseUrl}}/api/inventory/{{itemId}}", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "{{itemId}}"] } } },
+        { "name": "Restore item", "request": { "method": "POST", "url": { "raw": "{{baseUrl}}/api/inventory/{{itemId}}/restore", "host": ["{{baseUrl}}"], "path": ["api", "inventory", "{{itemId}}", "restore"] } } },
+        {
+          "name": "Stock ledger (all items)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory-transactions?itemId=&transactionType=&referenceType=&performedBy=&startDate=&endDate=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "inventory-transactions"],
+              "query": [
+                { "key": "itemId", "value": "" },
+                { "key": "transactionType", "value": "", "description": "DONATION_IN | DISTRIBUTION_OUT | MANUAL_ADJUSTMENT | CORRECTION" },
+                { "key": "referenceType", "value": "", "description": "DONATION | DISTRIBUTION | MANUAL | SYSTEM" },
+                { "key": "performedBy", "value": "" },
+                { "key": "startDate", "value": "" },
+                { "key": "endDate", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Donors",
+      "item": [
+        {
+          "name": "Create donor",
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('donorId', pm.response.json().data.id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"donorName\": \"Jane Doe\",\n  \"donorType\": \"INDIVIDUAL\",\n  \"phone\": \"0771234567\",\n  \"email\": \"jane@example.com\",\n  \"address\": \"12 Temple Road\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/donors", "host": ["{{baseUrl}}"], "path": ["api", "donors"] }
+          }
+        },
+        {
+          "name": "List donors",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/donors?search=&donorType=&status=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "donors"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "donorType", "value": "", "description": "INDIVIDUAL | ORGANIZATION | ANONYMOUS" },
+                { "key": "status", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        { "name": "Get donor", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donors/{{donorId}}", "host": ["{{baseUrl}}"], "path": ["api", "donors", "{{donorId}}"] } } },
+        {
+          "name": "Update donor",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"donorName\": \"Jane Doe\",\n  \"donorType\": \"INDIVIDUAL\",\n  \"phone\": \"0779998888\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/donors/{{donorId}}", "host": ["{{baseUrl}}"], "path": ["api", "donors", "{{donorId}}"] }
+          }
+        },
+        {
+          "name": "Change donor status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"INACTIVE\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/donors/{{donorId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "donors", "{{donorId}}", "status"] }
+          }
+        },
+        { "name": "Donor donations", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donors/{{donorId}}/donations", "host": ["{{baseUrl}}"], "path": ["api", "donors", "{{donorId}}", "donations"] } } },
+        { "name": "Donor statistics", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donors/{{donorId}}/statistics", "host": ["{{baseUrl}}"], "path": ["api", "donors", "{{donorId}}", "statistics"] } } }
+      ]
+    },
+    {
+      "name": "Donations",
+      "item": [
+        {
+          "name": "Register donation",
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('donationId', pm.response.json().data.id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "{{$guid}}", "description": "Optional: a retry with the same key returns the original donation instead of duplicating stock." }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donorId\": {{donorId}},\n  \"donationDate\": \"2026-08-12\",\n  \"notes\": \"Monthly food donation\",\n  \"items\": [\n    {\n      \"inventoryItemId\": {{itemId}},\n      \"quantity\": 50,\n      \"expiryDate\": \"2027-01-01\"\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/donations", "host": ["{{baseUrl}}"], "path": ["api", "donations"] }
+          }
+        },
+        {
+          "name": "List donations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/donations?search=&donorId=&startDate=&endDate=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "donations"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "donorId", "value": "" },
+                { "key": "startDate", "value": "" },
+                { "key": "endDate", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        { "name": "Get donation", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donations/{{donationId}}", "host": ["{{baseUrl}}"], "path": ["api", "donations", "{{donationId}}"] } } },
+        { "name": "Get by reference", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donations/reference/DON-2026-000001", "host": ["{{baseUrl}}"], "path": ["api", "donations", "reference", "DON-2026-000001"] } } },
+        { "name": "Donation items", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donations/{{donationId}}/items", "host": ["{{baseUrl}}"], "path": ["api", "donations", "{{donationId}}", "items"] } } },
+        { "name": "Donation receipt", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donations/{{donationId}}/receipt", "host": ["{{baseUrl}}"], "path": ["api", "donations", "{{donationId}}", "receipt"] } } },
+        { "name": "Bulk template (CSV)", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/donations/bulk/template", "host": ["{{baseUrl}}"], "path": ["api", "donations", "bulk", "template"] } } },
+        {
+          "name": "Bulk preview",
+          "request": {
+            "method": "POST",
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": [], "description": "CSV using the template header. Validates only — nothing is saved." }] },
+            "url": { "raw": "{{baseUrl}}/api/donations/bulk/preview", "host": ["{{baseUrl}}"], "path": ["api", "donations", "bulk", "preview"] }
+          }
+        },
+        {
+          "name": "Bulk import",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Idempotency-Key", "value": "{{$guid}}" }],
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": [] }] },
+            "url": {
+              "raw": "{{baseUrl}}/api/donations/bulk/import?allowPartial=false",
+              "host": ["{{baseUrl}}"], "path": ["api", "donations", "bulk", "import"],
+              "query": [{ "key": "allowPartial", "value": "false", "description": "true imports the valid rows and returns the rejected ones" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Beneficiaries",
+      "item": [
+        {
+          "name": "Register beneficiary",
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('beneficiaryId', pm.response.json().data.id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"beneficiaryName\": \"Ayesha Khan\",\n  \"identificationNumber\": \"NIC-9912345\",\n  \"familySize\": 4,\n  \"contactNumber\": \"0771234567\",\n  \"address\": \"12 Temple Road\",\n  \"priorityLevel\": \"HIGH\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/beneficiaries", "host": ["{{baseUrl}}"], "path": ["api", "beneficiaries"] }
+          }
+        },
+        {
+          "name": "Search beneficiaries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/beneficiaries?search=&priority=&status=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "beneficiaries"],
+              "query": [
+                { "key": "search", "value": "", "description": "code, name, identification or contact number" },
+                { "key": "priority", "value": "", "description": "HIGH | MEDIUM | LOW" },
+                { "key": "status", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        { "name": "Get beneficiary", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}", "host": ["{{baseUrl}}"], "path": ["api", "beneficiaries", "{{beneficiaryId}}"] } } },
+        {
+          "name": "Update beneficiary",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"beneficiaryName\": \"Ayesha Khan\",\n  \"familySize\": 6,\n  \"priorityLevel\": \"MEDIUM\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}", "host": ["{{baseUrl}}"], "path": ["api", "beneficiaries", "{{beneficiaryId}}"] }
+          }
+        },
+        {
+          "name": "Change beneficiary status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"INACTIVE\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "beneficiaries", "{{beneficiaryId}}", "status"] }
+          }
+        },
+        { "name": "Distribution history", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}/distributions", "host": ["{{baseUrl}}"], "path": ["api", "beneficiaries", "{{beneficiaryId}}", "distributions"] } } },
+        { "name": "Beneficiary statistics", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/beneficiaries/{{beneficiaryId}}/statistics", "host": ["{{baseUrl}}"], "path": ["api", "beneficiaries", "{{beneficiaryId}}", "statistics"] } } }
+      ]
+    },
+    {
+      "name": "Distributions",
+      "item": [
+        {
+          "name": "1. Create request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "pm.collectionVariables.set('distributionId', data.id);",
+                  "pm.collectionVariables.set('distributionItemId', data.items[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"beneficiaryId\": {{beneficiaryId}},\n  \"requestDate\": \"2026-08-12\",\n  \"priority\": \"HIGH\",\n  \"reason\": \"Household food support\",\n  \"items\": [\n    {\n      \"inventoryItemId\": {{itemId}},\n      \"requestedQuantity\": 20\n    }\n  ]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/distributions", "host": ["{{baseUrl}}"], "path": ["api", "distributions"] }
+          }
+        },
+        {
+          "name": "2. Allocate (stock NOT reduced)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [\n    {\n      \"distributionItemId\": {{distributionItemId}},\n      \"allocatedQuantity\": 20\n    }\n  ]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}/allocate", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}", "allocate"] }
+          }
+        },
+        {
+          "name": "3. Approve (stock NOT reduced)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"notes\": \"Approved for immediate hand-over\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}/approve", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}", "approve"] }
+          }
+        },
+        {
+          "name": "4. Complete (deducts stock)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"notes\": \"Collected in person\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}/complete", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}", "complete"] }
+          }
+        },
+        {
+          "name": "4b. Complete with ADMIN duplicate override",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"overrideDuplicates\": true,\n  \"overrideReason\": \"Emergency assistance approved due to exceptional circumstances.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}/complete", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}", "complete"] }
+          }
+        },
+        {
+          "name": "Reject",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Beneficiary already served by a partner agency\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}/reject", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}", "reject"] }
+          }
+        },
+        {
+          "name": "Cancel",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Requested in error\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}/cancel", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}", "cancel"] }
+          }
+        },
+        {
+          "name": "List distributions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/distributions?search=&status=&priority=&beneficiaryId=&startDate=&endDate=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "distributions"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "status", "value": "", "description": "PENDING | APPROVED | REJECTED | COMPLETED | CANCELLED" },
+                { "key": "priority", "value": "" },
+                { "key": "beneficiaryId", "value": "" },
+                { "key": "startDate", "value": "" },
+                { "key": "endDate", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        { "name": "Get distribution", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}"] } } },
+        {
+          "name": "Check duplicate",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/distributions/check-duplicate?beneficiaryId={{beneficiaryId}}&inventoryItemId={{itemId}}",
+              "host": ["{{baseUrl}}"], "path": ["api", "distributions", "check-duplicate"],
+              "query": [
+                { "key": "beneficiaryId", "value": "{{beneficiaryId}}" },
+                { "key": "inventoryItemId", "value": "{{itemId}}" }
+              ]
+            }
+          }
+        },
+        { "name": "By beneficiary", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/distributions/beneficiary/{{beneficiaryId}}", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "beneficiary", "{{beneficiaryId}}"] } } },
+        { "name": "Distribution report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/distributions/{{distributionId}}/report", "host": ["{{baseUrl}}"], "path": ["api", "distributions", "{{distributionId}}", "report"] } } }
+      ]
+    },
+    {
+      "name": "Volunteers",
+      "item": [
+        {
+          "name": "Register volunteer",
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('volunteerId', pm.response.json().data.id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"volunteerName\": \"Nimal Perera\",\n  \"phone\": \"0779998888\",\n  \"email\": \"nimal@example.com\",\n  \"joinedDate\": \"2026-01-15\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/volunteers", "host": ["{{baseUrl}}"], "path": ["api", "volunteers"] }
+          }
+        },
+        {
+          "name": "List volunteers",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/volunteers?search=&status=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "volunteers"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "status", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        { "name": "Get volunteer", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/volunteers/{{volunteerId}}", "host": ["{{baseUrl}}"], "path": ["api", "volunteers", "{{volunteerId}}"] } } },
+        {
+          "name": "Update volunteer",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"volunteerName\": \"Nimal Perera\",\n  \"phone\": \"0711112222\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/volunteers/{{volunteerId}}", "host": ["{{baseUrl}}"], "path": ["api", "volunteers", "{{volunteerId}}"] }
+          }
+        },
+        {
+          "name": "Change volunteer status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"INACTIVE\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/volunteers/{{volunteerId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "volunteers", "{{volunteerId}}", "status"] }
+          }
+        },
+        { "name": "Volunteer tasks", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/volunteers/{{volunteerId}}/tasks", "host": ["{{baseUrl}}"], "path": ["api", "volunteers", "{{volunteerId}}", "tasks"] } } },
+        { "name": "Volunteer activity", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/volunteers/{{volunteerId}}/activity", "host": ["{{baseUrl}}"], "path": ["api", "volunteers", "{{volunteerId}}", "activity"] } } }
+      ]
+    },
+    {
+      "name": "Volunteer tasks",
+      "item": [
+        {
+          "name": "Assign task",
+          "event": [
+            { "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.collectionVariables.set('taskId', pm.response.json().data.id);"] } }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"volunteerId\": {{volunteerId}},\n  \"title\": \"Pack food parcels\",\n  \"description\": \"Prepare 40 parcels for the Saturday round\",\n  \"taskDate\": \"2026-08-12\",\n  \"dueDate\": \"2026-08-15\",\n  \"relatedDistributionId\": null\n}" },
+            "url": { "raw": "{{baseUrl}}/api/volunteer-tasks", "host": ["{{baseUrl}}"], "path": ["api", "volunteer-tasks"] }
+          }
+        },
+        {
+          "name": "List tasks",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/volunteer-tasks?search=&volunteerId=&status=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "volunteer-tasks"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "volunteerId", "value": "" },
+                { "key": "status", "value": "", "description": "PENDING | IN_PROGRESS | COMPLETED | CANCELLED" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        { "name": "Get task", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/volunteer-tasks/{{taskId}}", "host": ["{{baseUrl}}"], "path": ["api", "volunteer-tasks", "{{taskId}}"] } } },
+        {
+          "name": "Update task",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Pack food parcels\",\n  \"description\": \"Prepare 60 parcels\",\n  \"taskDate\": \"2026-08-12\",\n  \"dueDate\": \"2026-08-16\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/volunteer-tasks/{{taskId}}", "host": ["{{baseUrl}}"], "path": ["api", "volunteer-tasks", "{{taskId}}"] }
+          }
+        },
+        {
+          "name": "Update task status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/volunteer-tasks/{{taskId}}/status", "host": ["{{baseUrl}}"], "path": ["api", "volunteer-tasks", "{{taskId}}", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        { "name": "Inventory report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/inventory?categoryId=", "host": ["{{baseUrl}}"], "path": ["api", "reports", "inventory"], "query": [{ "key": "categoryId", "value": "" }] } } },
+        { "name": "Donation report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/donations?startDate=&endDate=&donorId=", "host": ["{{baseUrl}}"], "path": ["api", "reports", "donations"], "query": [{ "key": "startDate", "value": "" }, { "key": "endDate", "value": "" }, { "key": "donorId", "value": "" }] } } },
+        { "name": "Distribution report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/distributions?startDate=&endDate=&beneficiaryId=&itemId=", "host": ["{{baseUrl}}"], "path": ["api", "reports", "distributions"], "query": [{ "key": "startDate", "value": "" }, { "key": "endDate", "value": "" }, { "key": "beneficiaryId", "value": "" }, { "key": "itemId", "value": "" }] } } },
+        { "name": "Beneficiary report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/beneficiaries", "host": ["{{baseUrl}}"], "path": ["api", "reports", "beneficiaries"] } } },
+        { "name": "Volunteer report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/volunteers", "host": ["{{baseUrl}}"], "path": ["api", "reports", "volunteers"] } } },
+        { "name": "Expiry report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/expiry", "host": ["{{baseUrl}}"], "path": ["api", "reports", "expiry"] } } },
+        { "name": "Stock movement report", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/stock-movements?itemId=&transactionType=&startDate=&endDate=&page=0&size=20", "host": ["{{baseUrl}}"], "path": ["api", "reports", "stock-movements"], "query": [{ "key": "itemId", "value": "" }, { "key": "transactionType", "value": "" }, { "key": "startDate", "value": "" }, { "key": "endDate", "value": "" }, { "key": "page", "value": "0" }, { "key": "size", "value": "20" }] } } },
+        { "name": "Export inventory CSV", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/inventory/export", "host": ["{{baseUrl}}"], "path": ["api", "reports", "inventory", "export"] } } },
+        { "name": "Export donations CSV", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/donations/export", "host": ["{{baseUrl}}"], "path": ["api", "reports", "donations", "export"] } } },
+        { "name": "Export distributions CSV", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/distributions/export", "host": ["{{baseUrl}}"], "path": ["api", "reports", "distributions", "export"] } } },
+        { "name": "Export beneficiaries CSV", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/beneficiaries/export", "host": ["{{baseUrl}}"], "path": ["api", "reports", "beneficiaries", "export"] } } },
+        { "name": "Export volunteers CSV", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/volunteers/export", "host": ["{{baseUrl}}"], "path": ["api", "reports", "volunteers", "export"] } } },
+        { "name": "Export stock movements CSV", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/reports/stock-movements/export", "host": ["{{baseUrl}}"], "path": ["api", "reports", "stock-movements", "export"] } } }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        { "name": "Summary", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/dashboard/summary", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "summary"] } } },
+        { "name": "Donation trend", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/dashboard/donation-trend?period=6months", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "donation-trend"], "query": [{ "key": "period", "value": "6months", "description": "3months | 6months | 12months" }] } } },
+        { "name": "Distribution trend", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/dashboard/distribution-trend?period=12months", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "distribution-trend"], "query": [{ "key": "period", "value": "12months" }] } } },
+        { "name": "Inventory by category", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/dashboard/inventory-by-category", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "inventory-by-category"] } } },
+        { "name": "Beneficiary priority", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/dashboard/beneficiary-priority", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "beneficiary-priority"] } } },
+        { "name": "Recent activity", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/dashboard/recent-activity", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "recent-activity"] } } },
+        { "name": "Alerts", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/dashboard/alerts", "host": ["{{baseUrl}}"], "path": ["api", "dashboard", "alerts"] } } }
+      ]
+    },
+    {
+      "name": "Audit logs",
+      "item": [
+        {
+          "name": "Search audit logs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/audit-logs?userId=&action=&entityType=&entityId=&startDate=&endDate=&page=0&size=20",
+              "host": ["{{baseUrl}}"], "path": ["api", "audit-logs"],
+              "query": [
+                { "key": "userId", "value": "" },
+                { "key": "action", "value": "", "description": "e.g. COMPLETE_DISTRIBUTION, OVERRIDE_DUPLICATE" },
+                { "key": "entityType", "value": "" },
+                { "key": "entityId", "value": "" },
+                { "key": "startDate", "value": "" },
+                { "key": "endDate", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        { "name": "Available actions", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/audit-logs/actions", "host": ["{{baseUrl}}"], "path": ["api", "audit-logs", "actions"] } } }
+      ]
+    }
+  ]
+}
