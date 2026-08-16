@@ -101,7 +101,7 @@ export default function BulkImportPage() {
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex w-full flex-col items-center gap-2 rounded-xl border-2 border-dashed border-ink-300 py-10 text-center hover:border-brand-400 hover:bg-brand-50/40"
+            className="flex w-full flex-col items-center gap-2 rounded-[10px] border-2 border-dashed border-ink-300 py-10 text-center hover:border-brand-400 hover:bg-brand-50/40"
           >
             <FileSpreadsheet className="h-8 w-8 text-ink-400" />
             <p className="text-sm font-medium text-ink-700">{file ? file.name : "Click to select a CSV file"}</p>
@@ -113,7 +113,7 @@ export default function BulkImportPage() {
       {previewMutation.isPending && (
         <Card className="mt-4">
           <CardBody>
-            <div className="h-24 animate-pulse rounded-lg bg-ink-100" />
+            <div className="h-24 animate-pulse rounded-[10px] bg-ink-100" />
           </CardBody>
         </Card>
       )}
@@ -194,21 +194,21 @@ export default function BulkImportPage() {
           <CardHeader title="3. Import result" />
           <CardBody>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-lg bg-emerald-50 p-4 text-center">
-                <CheckCircle2 className="mx-auto h-5 w-5 text-emerald-600" />
+              <div className="rounded-[10px] bg-emerald-50 p-4 text-center">
+                <CheckCircle2 className="mx-auto h-5 w-5 text-ink-900" />
                 <p className="mt-1 text-xl font-bold text-emerald-700">{result.successfulRows}</p>
-                <p className="text-xs text-emerald-600">Rows imported</p>
+                <p className="text-xs text-ink-900">Rows imported</p>
               </div>
-              <div className="rounded-lg bg-rose-50 p-4 text-center">
+              <div className="rounded-[10px] bg-rose-50 p-4 text-center">
                 <XCircle className="mx-auto h-5 w-5 text-rose-600" />
                 <p className="mt-1 text-xl font-bold text-rose-700">{result.failedRows}</p>
                 <p className="text-xs text-rose-600">Rows failed</p>
               </div>
-              <div className="rounded-lg bg-ink-100 p-4 text-center">
+              <div className="rounded-[10px] bg-ink-100 p-4 text-center">
                 <p className="mt-1 text-xl font-bold text-ink-800">{result.createdDonations}</p>
                 <p className="text-xs text-ink-500">Donations created</p>
               </div>
-              <div className="rounded-lg bg-ink-100 p-4 text-center">
+              <div className="rounded-[10px] bg-ink-100 p-4 text-center">
                 <p className="mt-1 text-xl font-bold text-ink-800">{result.totalQuantityImported}</p>
                 <p className="text-xs text-ink-500">Total quantity</p>
               </div>

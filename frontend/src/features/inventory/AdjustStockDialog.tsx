@@ -90,7 +90,7 @@ export function AdjustStockDialog({
                   type="button"
                   onClick={() => field.onChange("ADD")}
                   className={cn(
-                    "flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
+                    "flex items-center justify-center gap-2 rounded-[10px] border px-3 py-2 text-sm font-medium transition-colors",
                     field.value === "ADD"
                       ? "border-brand-500 bg-brand-50 text-brand-700"
                       : "border-ink-300 text-ink-600 hover:bg-ink-50"
@@ -102,7 +102,7 @@ export function AdjustStockDialog({
                   type="button"
                   onClick={() => field.onChange("REMOVE")}
                   className={cn(
-                    "flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
+                    "flex items-center justify-center gap-2 rounded-[10px] border px-3 py-2 text-sm font-medium transition-colors",
                     field.value === "REMOVE"
                       ? "border-rose-500 bg-rose-50 text-rose-700"
                       : "border-ink-300 text-ink-600 hover:bg-ink-50"

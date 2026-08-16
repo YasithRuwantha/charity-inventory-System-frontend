@@ -14,7 +14,7 @@ interface TabsProps {
 
 export function Tabs({ items, active, onChange }: TabsProps) {
   return (
-    <div className="flex items-center gap-1 border-b border-ink-200">
+    <div className="flex items-center gap-1 border-b border-ink-200/80">
       {items.map((item) => {
         const isActive = item.key === active;
         return (
@@ -22,16 +22,16 @@ export function Tabs({ items, active, onChange }: TabsProps) {
             key={item.key}
             onClick={() => onChange(item.key)}
             className={cn(
-              "relative flex items-center gap-2 px-3.5 py-2.5 text-sm font-medium transition-colors",
-              isActive ? "text-brand-700" : "text-ink-500 hover:text-ink-800"
+              "relative flex items-center gap-2 px-3.5 py-2.5 text-sm transition-colors",
+              isActive ? "font-bold text-brand-700 dark:text-brand-400" : "font-medium text-ink-500 hover:text-ink-800"
             )}
           >
             {item.label}
             {item.count !== undefined && (
               <span
                 className={cn(
-                  "rounded-full px-1.5 py-0.5 text-xs font-semibold",
-                  isActive ? "bg-brand-100 text-brand-700" : "bg-ink-100 text-ink-500"
+                  "rounded-md px-1.5 py-0.5 text-xs font-semibold",
+                  isActive ? "bg-brand-50 text-brand-700 dark:bg-brand-100 dark:text-brand-400" : "bg-ink-100 text-ink-500"
                 )}
               >
                 {item.count}

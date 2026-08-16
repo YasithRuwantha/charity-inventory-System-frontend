@@ -36,10 +36,10 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-1">
           <CardBody className="flex flex-col items-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-600 text-xl font-semibold text-white">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-600 text-xl font-semibold text-white dark:text-brand-950">
               {initials(me.name)}
             </div>
-            <p className="mt-3 font-display text-lg font-bold text-ink-900">{me.name}</p>
+            <p className="mt-3 text-lg font-bold tracking-[-0.02em] text-ink-900">{me.name}</p>
             <p className="text-sm text-ink-500">{me.email}</p>
             <div className="mt-3 flex items-center gap-2">
               <Badge tone="brand" dot>
@@ -59,9 +59,9 @@ export default function ProfilePage() {
         <Card className="lg:col-span-2">
           <CardHeader title="Access level" description="What your role can do in this system" />
           <CardBody>
-            <div className="flex items-start gap-3 rounded-lg bg-brand-50 p-4">
-              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" />
-              <p className="text-sm text-brand-800">{ROLE_DESCRIPTIONS[me.role]}</p>
+            <div className="flex items-start gap-3 rounded-[10px] border border-brand-200 bg-brand-50 p-4">
+              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-brand-700" />
+              <p className="text-sm text-brand-900">{ROLE_DESCRIPTIONS[me.role]}</p>
             </div>
             <p className="mt-4 text-sm text-ink-500">
               Need a different role or access level? Contact your organization's administrator — role changes are

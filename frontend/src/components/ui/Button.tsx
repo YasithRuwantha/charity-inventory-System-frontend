@@ -13,22 +13,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 shadow-sm disabled:bg-brand-300",
+    "bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800 disabled:bg-brand-300 dark:text-brand-950 dark:disabled:bg-brand-200",
   secondary:
-    "bg-ink-900 text-white hover:bg-ink-800 active:bg-ink-950 shadow-sm disabled:bg-ink-300",
+    "bg-[var(--color-amber-accent)] text-white hover:opacity-90 disabled:opacity-40 dark:text-ink-950",
   outline:
-    "border border-ink-300 bg-white text-ink-700 hover:bg-ink-50 hover:border-ink-400 disabled:text-ink-300 disabled:bg-ink-50",
+    "border border-ink-200 bg-white text-ink-800 hover:bg-ink-50 disabled:text-ink-300 dark:bg-ink-100 dark:text-ink-800 dark:hover:bg-ink-200",
   ghost: "text-ink-600 hover:bg-ink-100 hover:text-ink-900 disabled:text-ink-300",
-  danger: "bg-rose-600 text-white hover:bg-rose-700 shadow-sm disabled:bg-rose-300",
+  danger: "bg-[var(--color-rose-accent)] text-white hover:opacity-90 disabled:opacity-40",
   "danger-outline":
-    "border border-rose-200 bg-white text-rose-600 hover:bg-rose-50 hover:border-rose-300 disabled:text-rose-200",
+    "border border-rose-200 bg-white text-[var(--color-rose-accent)] hover:bg-rose-50 disabled:opacity-40 dark:bg-ink-100 dark:border-rose-400/40",
 };
 
 const sizeClasses: Record<Size, string> = {
   sm: "h-8 px-3 text-sm gap-1.5",
-  md: "h-9.5 px-4 text-sm gap-2",
+  md: "h-10 px-[18px] text-sm gap-2",
   lg: "h-11 px-5 text-[15px] gap-2",
-  icon: "h-9 w-9 p-0",
+  icon: "h-10 w-10 p-0",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -38,8 +38,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap rounded-lg font-medium transition-colors duration-150",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+          "inline-flex items-center justify-center whitespace-nowrap rounded-[10px] font-semibold normal-case shadow-none transition-colors duration-150",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-50",
           "disabled:cursor-not-allowed",
           variantClasses[variant],
           sizeClasses[size],

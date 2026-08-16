@@ -99,7 +99,7 @@ export default function LedgerPage() {
                   <TD>
                     <Badge tone={tx.quantity >= 0 ? "success" : "danger"}>{toTitleCase(tx.transactionType)}</Badge>
                   </TD>
-                  <TD className={tx.quantity >= 0 ? "font-medium text-emerald-600" : "font-medium text-rose-600"}>
+                  <TD className={tx.quantity >= 0 ? "font-medium text-ink-900" : "font-medium text-rose-600"}>
                     {tx.quantity >= 0 ? `+${tx.quantity}` : tx.quantity}
                   </TD>
                   <TD className="text-ink-500">

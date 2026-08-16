@@ -227,7 +227,7 @@ export function NewDistributionDialog({
 
           <div className="space-y-3">
             {fields.map((field, index) => (
-              <div key={field.id} className="rounded-lg border border-ink-200 p-3">
+              <div key={field.id} className="rounded-[10px] border border-ink-200 p-3">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-[2fr_1fr_2fr_auto]">
                   <div>
                     <Label className="mb-1 text-xs">Item</Label>
@@ -259,7 +259,7 @@ export function NewDistributionDialog({
                       type="button"
                       onClick={() => remove(index)}
                       disabled={fields.length === 1}
-                      className="flex h-9.5 w-9.5 items-center justify-center rounded-lg text-ink-400 hover:bg-rose-50 hover:text-rose-600 disabled:opacity-30"
+                      className="flex h-9.5 w-9.5 items-center justify-center rounded-[10px] text-ink-400 hover:bg-rose-50 hover:text-rose-600 disabled:opacity-30"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

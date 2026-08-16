@@ -15,19 +15,14 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
   const end = Math.min((page + 1) * size, totalElements);
 
   return (
-    <div className="flex items-center justify-between border-t border-ink-100 px-5 py-3">
+    <div className="flex items-center justify-between border-t border-ink-200/80 px-5 py-3">
       <p className="text-sm text-ink-500">
         Showing <span className="font-medium text-ink-700">{start}</span>–
         <span className="font-medium text-ink-700">{end}</span> of{" "}
         <span className="font-medium text-ink-700">{totalElements}</span>
       </p>
       <div className="flex items-center gap-1.5">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onPageChange(page - 1)}
-          disabled={page <= 0}
-        >
+        <Button variant="outline" size="sm" onClick={() => onPageChange(page - 1)} disabled={page <= 0}>
           <ChevronLeft className="h-4 w-4" />
           Previous
         </Button>

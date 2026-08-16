@@ -85,7 +85,7 @@ export function CompleteDialog({ open, onClose, distribution }: { open: boolean;
     >
       <div className="space-y-3">
         {distribution.items.map((item) => (
-          <div key={item.id} className="rounded-lg border border-ink-200 p-3">
+          <div key={item.id} className="rounded-[10px] border border-ink-200 p-3">
             <p className="font-medium text-ink-900">{item.itemName}</p>
             <p className="text-xs text-ink-400">
               Allocated {item.allocatedQuantity ?? 0} {UNIT_LABELS[item.unit]} · Available now {item.availableQuantity}
@@ -104,7 +104,7 @@ export function CompleteDialog({ open, onClose, distribution }: { open: boolean;
         ))}
 
         {duplicate && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3.5">
+          <div className="border border-brand-300 bg-brand-50 p-3.5">
             <div className="flex items-start gap-2.5">
               <TriangleAlert className="mt-0.5 h-4.5 w-4.5 shrink-0 text-amber-600" />
               <div className="text-sm text-amber-800">

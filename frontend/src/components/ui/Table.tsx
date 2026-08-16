@@ -10,22 +10,22 @@ export function Table({ className, ...props }: HTMLAttributes<HTMLTableElement>)
 }
 
 export function THead({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
-  return <thead className={cn("border-b border-ink-200 bg-ink-50/60", className)} {...props} />;
+  return <thead className={cn("border-b border-ink-200/80 bg-ink-50/50 dark:bg-ink-50/30", className)} {...props} />;
 }
 
 export function TBody({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
-  return <tbody className={cn("divide-y divide-ink-100", className)} {...props} />;
+  return <tbody className={cn("divide-y divide-ink-200/60", className)} {...props} />;
 }
 
 export function TR({ className, ...props }: HTMLAttributes<HTMLTableRowElement>) {
-  return <tr className={cn("transition-colors hover:bg-ink-50/70", className)} {...props} />;
+  return <tr className={cn("transition-colors hover:bg-ink-50/80 dark:hover:bg-ink-50/40", className)} {...props} />;
 }
 
 export function TH({ className, ...props }: ThHTMLAttributes<HTMLTableCellElement>) {
   return (
     <th
       className={cn(
-        "whitespace-nowrap px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-ink-500",
+        "whitespace-nowrap px-4 py-2.5 text-left text-[0.8rem] font-semibold uppercase tracking-[0.02em] text-ink-500",
         className
       )}
       {...props}
@@ -34,5 +34,5 @@ export function TH({ className, ...props }: ThHTMLAttributes<HTMLTableCellElemen
 }
 
 export function TD({ className, ...props }: TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className={cn("whitespace-nowrap px-4 py-3 text-ink-700", className)} {...props} />;
+  return <td className={cn("whitespace-nowrap px-4 py-3 text-ink-800", className)} {...props} />;
 }

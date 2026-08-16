@@ -54,7 +54,7 @@ export default function DashboardPage() {
     <div>
       <PageHeader
         title={`Welcome back, ${user?.name?.split(" ")[0] ?? ""}`}
-        description="Here's what's happening across your organization today."
+        description="Here's what's happening across donations, stock, and distributions today."
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -74,13 +74,13 @@ export default function DashboardPage() {
             title="Donation & distribution trend"
             description="Quantity moved per month"
             actions={
-              <div className="flex items-center gap-1 rounded-lg bg-ink-100 p-0.5">
+              <div className="flex items-center gap-1 rounded-[10px] bg-ink-100 p-0.5">
                 {PERIODS.map((p) => (
                   <button
                     key={p.key}
                     onClick={() => setPeriod(p.key)}
-                    className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
-                      period === p.key ? "bg-white text-ink-800 shadow-sm" : "text-ink-500 hover:text-ink-700"
+                    className={`rounded-[8px] px-2.5 py-1 text-xs font-semibold transition-colors ${
+                      period === p.key ? "bg-white text-ink-800 dark:bg-ink-200" : "text-ink-500 hover:text-ink-700"
                     }`}
                   >
                     {p.label}
@@ -95,16 +95,16 @@ export default function DashboardPage() {
                 <span className="h-2 w-2 rounded-full bg-brand-600" /> Donations
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-sky-500" /> Distributions
+                <span className="h-2 w-2 rounded-full bg-[var(--color-amber-accent)]" /> Distributions
               </span>
             </div>
             {donationTrend.isLoading || distributionTrend.isLoading ? (
-              <div className="h-[220px] animate-pulse rounded-lg bg-ink-100" />
+              <div className="h-[220px] animate-pulse rounded-[10px] bg-ink-100" />
             ) : (
               <TrendChart
                 series={[
-                  { key: "donations", label: "Donations", color: "#059669", data: donationTrend.data ?? [] },
-                  { key: "distributions", label: "Distributions", color: "#0ea5e9", data: distributionTrend.data ?? [] },
+                  { key: "donations", label: "Donations", color: "#0F766E", data: donationTrend.data ?? [] },
+                  { key: "distributions", label: "Distributions", color: "#B45309", data: distributionTrend.data ?? [] },
                 ]}
               />
             )}
@@ -115,17 +115,17 @@ export default function DashboardPage() {
           <CardHeader title="Alerts" description="Needs attention" />
           <CardBody className="max-h-[300px] overflow-y-auto p-0">
             {alerts.isLoading ? (
-              <div className="space-y-2 p-5">
-                <div className="h-10 animate-pulse rounded-lg bg-ink-100" />
-                <div className="h-10 animate-pulse rounded-lg bg-ink-100" />
-                <div className="h-10 animate-pulse rounded-lg bg-ink-100" />
+              <div className="space-y-2 p-4">
+                <div className="h-10 animate-pulse bg-ink-100" />
+                <div className="h-10 animate-pulse bg-ink-100" />
+                <div className="h-10 animate-pulse bg-ink-100" />
               </div>
             ) : !alerts.data || alerts.data.length === 0 ? (
               <EmptyState icon={TriangleAlert} title="All clear" description="No alerts right now." />
             ) : (
-              <ul className="divide-y divide-ink-100">
+              <ul className="divide-y divide-ink-200">
                 {alerts.data.map((alert, i) => (
-                  <li key={i} className="flex items-start gap-3 px-5 py-3">
+                  <li key={i} className="flex items-start gap-3 px-4 py-3">
                     <Badge tone={alert.severity === "CRITICAL" ? "danger" : alert.severity === "WARNING" ? "warning" : "info"} dot>
                       {toTitleCase(alert.severity)}
                     </Badge>
@@ -143,7 +143,7 @@ export default function DashboardPage() {
           <CardHeader title="Inventory by category" description="Item count per category" />
           <CardBody>
             {byCategory.isLoading ? (
-              <div className="h-[220px] animate-pulse rounded-lg bg-ink-100" />
+              <div className="h-[220px] animate-pulse bg-ink-100" />
             ) : !byCategory.data || byCategory.data.length === 0 ? (
               <EmptyState title="No categories yet" />
             ) : (
@@ -156,7 +156,7 @@ export default function DashboardPage() {
           <CardHeader title="Beneficiaries by priority" />
           <CardBody>
             {byPriority.isLoading ? (
-              <div className="h-[220px] animate-pulse rounded-lg bg-ink-100" />
+              <div className="h-[220px] animate-pulse bg-ink-100" />
             ) : !byPriority.data || byPriority.data.length === 0 ? (
               <EmptyState title="No beneficiaries yet" />
             ) : (
@@ -169,17 +169,17 @@ export default function DashboardPage() {
           <CardHeader title="Recent activity" />
           <CardBody className="max-h-[280px] overflow-y-auto p-0">
             {recentActivity.isLoading ? (
-              <div className="space-y-2 p-5">
-                <div className="h-8 animate-pulse rounded-lg bg-ink-100" />
-                <div className="h-8 animate-pulse rounded-lg bg-ink-100" />
+              <div className="space-y-2 p-4">
+                <div className="h-8 animate-pulse bg-ink-100" />
+                <div className="h-8 animate-pulse bg-ink-100" />
               </div>
             ) : !recentActivity.data || recentActivity.data.length === 0 ? (
               <EmptyState title="No recent activity" />
             ) : (
-              <ul className="divide-y divide-ink-100">
+              <ul className="divide-y divide-ink-200">
                 {recentActivity.data.map((a, i) => (
-                  <li key={i} className="px-5 py-3">
-                    <p className="text-sm text-ink-700">{a.description}</p>
+                  <li key={i} className="px-4 py-3">
+                    <p className="text-sm text-ink-800">{a.description}</p>
                     <p className="mt-0.5 text-xs text-ink-400">
                       {a.performedBy ?? "System"} · {formatDateTime(a.occurredAt)}
                     </p>

@@ -48,7 +48,7 @@ function downloadBlob(blob: Blob, filename: string) {
 
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-ink-50 px-4 py-3">
+    <div className="rounded-[10px] bg-ink-50 px-4 py-3">
       <p className="text-xs font-medium text-ink-500">{label}</p>
       <p className="mt-1 font-display text-xl font-bold text-ink-900">{value}</p>
     </div>
@@ -143,10 +143,10 @@ function ReportLoading() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="h-20 animate-pulse rounded-lg bg-ink-100" />
+          <div key={i} className="h-20 animate-pulse rounded-[10px] bg-ink-100" />
         ))}
       </div>
-      <div className="h-56 animate-pulse rounded-lg bg-ink-100" />
+      <div className="h-56 animate-pulse rounded-[10px] bg-ink-100" />
     </div>
   );
 }
@@ -193,7 +193,7 @@ function DonationReportView({ loading, data }: { loading: boolean; data: Awaited
         {data.monthlyTrend.length === 0 ? (
           <EmptyState title="No trend data" />
         ) : (
-          <TrendChart series={[{ key: "donations", label: "Donations", color: "#059669", data: data.monthlyTrend }]} />
+          <TrendChart series={[{ key: "donations", label: "Donations", color: "#0F766E", data: data.monthlyTrend }]} />
         )}
       </div>
       <div>
@@ -219,7 +219,7 @@ function DistributionReportView({ loading, data }: { loading: boolean; data: Awa
         {data.monthlyTrend.length === 0 ? (
           <EmptyState title="No trend data" />
         ) : (
-          <TrendChart series={[{ key: "distributions", label: "Distributions", color: "#0ea5e9", data: data.monthlyTrend }]} />
+          <TrendChart series={[{ key: "distributions", label: "Distributions", color: "#3d5a73", data: data.monthlyTrend }]} />
         )}
       </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

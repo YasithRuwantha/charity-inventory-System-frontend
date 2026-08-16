@@ -9,6 +9,8 @@ import {
 } from "recharts";
 import type { TrendPoint } from "@/api/reports";
 
+export const CHART_COLORS = ["#0F766E", "#B45309", "#0369A1", "#BE123C", "#7C3AED", "#15803D", "#CA8A04"];
+
 interface TrendSeries {
   key: string;
   label: string;
@@ -44,19 +46,19 @@ export function TrendChart({ series, valueKey = "quantity", height = 220 }: Tren
         <defs>
           {series.map((s) => (
             <linearGradient key={s.key} id={`trend-${s.key}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={s.color} stopOpacity={0.28} />
+              <stop offset="0%" stopColor={s.color} stopOpacity={0.22} />
               <stop offset="100%" stopColor={s.color} stopOpacity={0} />
             </linearGradient>
           ))}
         </defs>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-        <XAxis dataKey="label" tick={{ fontSize: 12, fill: "#64748b" }} axisLine={{ stroke: "#e2e8f0" }} tickLine={false} />
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(15,23,42,0.08)" />
+        <XAxis dataKey="label" tick={{ fontSize: 12, fill: "#64748b" }} axisLine={{ stroke: "rgba(15,23,42,0.08)" }} tickLine={false} />
         <YAxis tick={{ fontSize: 12, fill: "#64748b" }} axisLine={false} tickLine={false} width={36} allowDecimals={false} />
         <Tooltip
           contentStyle={{
             borderRadius: 10,
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 8px 24px -6px rgb(15 23 42 / 0.15)",
+            border: "1px solid rgba(15,23,42,0.08)",
+            boxShadow: "none",
             fontSize: 13,
           }}
           labelStyle={{ color: "#0f172a", fontWeight: 600, marginBottom: 2 }}
@@ -69,7 +71,7 @@ export function TrendChart({ series, valueKey = "quantity", height = 220 }: Tren
             dataKey={s.key}
             name={s.key}
             stroke={s.color}
-            strokeWidth={2.5}
+            strokeWidth={2.25}
             fill={`url(#trend-${s.key})`}
             isAnimationActive={false}
           />

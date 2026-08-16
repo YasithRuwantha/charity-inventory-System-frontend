@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { HeartHandshake, X } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navSections } from "@/components/layout/nav";
 import { useAuthStore } from "@/store/auth";
@@ -13,31 +13,29 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
   const role = useAuthStore((s) => s.user?.role);
 
   const content = (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-gradient-to-b from-white to-[#F8FAF9] dark:from-ink-100 dark:to-ink-50">
       <div className="flex h-16 shrink-0 items-center gap-2.5 px-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white">
-          <HeartHandshake className="h-4.5 w-4.5" />
-        </div>
-        <div className="leading-tight">
-          <p className="font-display text-[15px] font-bold text-white">Charity IMS</p>
-          <p className="text-[11px] text-ink-400">Inventory Management</p>
+        <div className="min-w-0 leading-tight">
+          <p className="font-brand text-[1.15rem] font-bold leading-none text-brand-600">Charity IMS</p>
+          <p className="mt-1 text-[11px] font-medium text-ink-500">Inventory Management</p>
         </div>
         <button
           onClick={onCloseMobile}
-          className="ml-auto rounded-md p-1 text-ink-400 hover:bg-ink-800 hover:text-white lg:hidden"
+          className="ml-auto rounded-[8px] p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700 lg:hidden"
+          aria-label="Close menu"
         >
           <X className="h-4.5 w-4.5" />
         </button>
       </div>
 
-      <nav className="scrollbar-thin flex-1 space-y-5 overflow-y-auto px-3 pb-6 pt-2">
+      <nav className="scrollbar-thin flex-1 space-y-5 overflow-y-auto px-3 pb-6 pt-1">
         {navSections.map((section, idx) => {
           const items = section.items.filter((item) => !role || item.roles.includes(role));
           if (items.length === 0) return null;
           return (
             <div key={idx}>
               {section.label && (
-                <p className="mb-1.5 px-2.5 text-[11px] font-semibold uppercase tracking-wider text-ink-500">
+                <p className="mb-1.5 px-2.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
                   {section.label}
                 </p>
               )}
@@ -50,14 +48,14 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                     onClick={onCloseMobile}
                     className={({ isActive }) =>
                       cn(
-                        "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors",
+                        "flex min-h-11 items-center gap-2.5 rounded-[8px] px-2.5 text-[0.92rem] transition-colors",
                         isActive
-                          ? "bg-brand-600/15 text-brand-400"
-                          : "text-ink-300 hover:bg-white/5 hover:text-white"
+                          ? "bg-brand-600/12 font-bold text-brand-700 dark:text-brand-400"
+                          : "font-medium text-ink-600 hover:bg-brand-600/10 hover:text-brand-700"
                       )
                     }
                   >
-                    <item.icon className="h-4.5 w-4.5 shrink-0" />
+                    <item.icon className="h-[19px] w-[19px] shrink-0 opacity-90" />
                     {item.label}
                   </NavLink>
                 ))}
@@ -71,14 +69,12 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
 
   return (
     <>
-      <aside className="hidden w-64 shrink-0 border-r border-ink-800 bg-ink-950 lg:block">
-        {content}
-      </aside>
+      <aside className="hidden w-[248px] shrink-0 border-r border-ink-200/80 lg:block">{content}</aside>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-ink-950/60" onClick={onCloseMobile} />
-          <aside className="absolute inset-y-0 left-0 w-64 border-r border-ink-800 bg-ink-950 animate-slide-up">
+          <div className="absolute inset-0 bg-ink-950/50" onClick={onCloseMobile} />
+          <aside className="absolute inset-y-0 left-0 w-[248px] border-r border-ink-200/80 shadow-popover animate-slide-up">
             {content}
           </aside>
         </div>

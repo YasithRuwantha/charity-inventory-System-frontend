@@ -49,18 +49,18 @@ export function InventoryItemPicker({
       {value ? (
         <div
           className={cn(
-            "flex h-9.5 w-full items-center justify-between rounded-lg border bg-white px-3 text-sm",
-            invalid ? "border-rose-400" : "border-ink-300"
+            "flex h-10 w-full items-center justify-between rounded-[10px] border bg-white px-3 text-sm dark:bg-ink-100",
+            invalid ? "border-rose-500" : "border-ink-200"
           )}
         >
           <div className="min-w-0">
             <span className="font-medium text-ink-800">{value.itemName}</span>
-            <span className="ml-1.5 text-ink-400">{value.itemCode}</span>
+            <span className="ml-1.5 font-mono text-xs text-ink-400">{value.itemCode}</span>
           </div>
           <button
             type="button"
             onClick={() => onChange(null)}
-            className="ml-2 shrink-0 rounded-md p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-700"
+            className="ml-2 shrink-0 p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-700"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -70,8 +70,8 @@ export function InventoryItemPicker({
           type="button"
           onClick={() => setOpen(true)}
           className={cn(
-            "flex h-9.5 w-full items-center justify-between rounded-lg border bg-white px-3 text-left text-sm text-ink-400",
-            invalid ? "border-rose-400" : "border-ink-300"
+            "flex h-10 w-full items-center justify-between rounded-[10px] border bg-white px-3 text-left text-sm text-ink-400 dark:bg-ink-100",
+            invalid ? "border-rose-500" : "border-ink-200"
           )}
         >
           {placeholder}
@@ -80,8 +80,8 @@ export function InventoryItemPicker({
       )}
 
       {open && !value && (
-        <div className="absolute z-40 mt-1.5 w-full rounded-lg border border-ink-200 bg-white shadow-popover animate-slide-up">
-          <div className="border-b border-ink-100 p-2">
+        <div className="absolute z-40 mt-1 w-full rounded-[10px] border border-ink-200/80 bg-white shadow-popover animate-slide-up dark:bg-ink-100">
+          <div className="border-b border-ink-200 p-2">
             <div className="relative">
               <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-400" />
               <input
@@ -89,7 +89,7 @@ export function InventoryItemPicker({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Type to search…"
-                className="h-8 w-full rounded-md border border-ink-200 pl-8 pr-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
+                className="h-8 w-full rounded-[10px] border border-ink-200 bg-white pl-8 pr-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30 dark:bg-ink-100"
               />
             </div>
           </div>

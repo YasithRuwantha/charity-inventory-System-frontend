@@ -101,13 +101,13 @@ export default function AuditLogPage() {
                           {log.oldValues && (
                             <div>
                               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">Before</p>
-                              <pre className="scrollbar-thin max-h-40 overflow-auto rounded-md bg-white p-2 text-xs text-ink-600">{log.oldValues}</pre>
+                              <pre className="scrollbar-thin max-h-40 overflow-auto rounded-[10px] bg-white p-2 text-xs text-ink-600">{log.oldValues}</pre>
                             </div>
                           )}
                           {log.newValues && (
                             <div>
                               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">After</p>
-                              <pre className="scrollbar-thin max-h-40 overflow-auto rounded-md bg-white p-2 text-xs text-ink-600">{log.newValues}</pre>
+                              <pre className="scrollbar-thin max-h-40 overflow-auto rounded-[10px] bg-white p-2 text-xs text-ink-600">{log.newValues}</pre>
                             </div>
                           )}
                           {log.ipAddress && (

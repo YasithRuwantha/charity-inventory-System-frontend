@@ -39,24 +39,24 @@ export function Dialog({ open, onClose, title, description, children, footer, si
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
-      <div className="absolute inset-0 bg-ink-950/50 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="absolute inset-0 bg-ink-950/45 backdrop-blur-[2px]" onClick={onClose} />
       <div
         className={cn(
-          "relative z-10 w-full rounded-xl bg-white shadow-popover animate-slide-up max-h-[90vh] flex flex-col",
+          "relative z-10 flex max-h-[90vh] w-full flex-col rounded-[14px] border border-ink-200/80 bg-white shadow-popover animate-slide-up dark:bg-ink-100",
           sizeClasses[size]
         )}
         role="dialog"
         aria-modal="true"
       >
         {(title || description) && (
-          <div className="flex items-start justify-between gap-4 border-b border-ink-100 px-6 py-4">
+          <div className="flex items-start justify-between gap-4 border-b border-ink-200/80 px-6 py-4">
             <div>
-              {title && <h2 className="text-base font-semibold text-ink-900">{title}</h2>}
+              {title && <h2 className="text-base font-bold tracking-[-0.02em] text-ink-900">{title}</h2>}
               {description && <p className="mt-1 text-sm text-ink-500">{description}</p>}
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700"
+              className="rounded-[8px] p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700"
               aria-label="Close"
             >
               <X className="h-4.5 w-4.5" />
@@ -64,7 +64,9 @@ export function Dialog({ open, onClose, title, description, children, footer, si
           </div>
         )}
         {children && <div className="scrollbar-thin overflow-y-auto px-6 py-5">{children}</div>}
-        {footer && <div className="flex items-center justify-end gap-2 border-t border-ink-100 px-6 py-4">{footer}</div>}
+        {footer && (
+          <div className="flex items-center justify-end gap-2 border-t border-ink-200/80 px-6 py-4">{footer}</div>
+        )}
       </div>
     </div>,
     document.body

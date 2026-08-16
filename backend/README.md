@@ -74,7 +74,7 @@ git checkout feature/charity-inventory-backend
 ### 2️⃣ Set up the database
 
 The app expects a MySQL user/database it can use — the values below match the defaults already in
-`application.properties`, so if you run this exact SQL you won't need to change any config:
+`1`, so if you run this exact SQL you won't need to change any config:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS charity_db;

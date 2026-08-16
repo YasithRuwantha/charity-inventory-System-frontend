@@ -170,7 +170,7 @@ export default function DistributionDetailPage() {
       </div>
 
       {isPending && !hasAllocation && (
-        <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-sm text-amber-700">
+        <div className="mb-4 border border-brand-300 bg-brand-50 px-3.5 py-2.5 text-sm text-amber-700">
           Allocate quantities for every line before this request can be approved.
         </div>
       )}

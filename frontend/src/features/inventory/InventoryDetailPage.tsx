@@ -153,7 +153,7 @@ export default function InventoryDetailPage() {
           <CardHeader title="Stock movement history" description="Every change to this item's quantity, oldest to newest reversed." />
           {txLoading ? (
             <CardBody>
-              <div className="h-32 animate-pulse rounded-lg bg-ink-100" />
+              <div className="h-32 animate-pulse rounded-[10px] bg-ink-100" />
             </CardBody>
           ) : !transactions || transactions.items.length === 0 ? (
             <EmptyState title="No movements yet" description="Stock changes will appear here." />
@@ -176,7 +176,7 @@ export default function InventoryDetailPage() {
                     <TD>
                       <Badge tone={tx.quantity >= 0 ? "success" : "danger"}>{toTitleCase(tx.transactionType)}</Badge>
                     </TD>
-                    <TD className={tx.quantity >= 0 ? "font-medium text-emerald-600" : "font-medium text-rose-600"}>
+                    <TD className={tx.quantity >= 0 ? "font-medium text-ink-900" : "font-medium text-rose-600"}>
                       {tx.quantity >= 0 ? `+${tx.quantity}` : tx.quantity}
                     </TD>
                     <TD className="text-ink-500">

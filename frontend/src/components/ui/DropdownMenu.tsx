@@ -26,7 +26,7 @@ export function DropdownMenu({ trigger, children, align = "right" }: DropdownMen
       {open && (
         <div
           className={cn(
-            "absolute z-40 mt-1.5 min-w-[180px] rounded-lg border border-ink-200 bg-white py-1 shadow-popover animate-slide-up",
+            "absolute z-40 mt-1.5 min-w-[180px] rounded-[10px] border border-ink-200/80 bg-white py-1 shadow-popover animate-slide-up dark:bg-ink-100",
             align === "right" ? "right-0" : "left-0"
           )}
           onClick={() => setOpen(false)}
@@ -54,7 +54,9 @@ export function DropdownItem({
       onClick={onClick}
       className={cn(
         "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors",
-        danger ? "text-rose-600 hover:bg-rose-50" : "text-ink-700 hover:bg-ink-50"
+        danger
+          ? "text-[var(--color-rose-accent)] hover:bg-rose-50 dark:hover:bg-rose-950/30"
+          : "text-ink-700 hover:bg-ink-50"
       )}
     >
       {icon}

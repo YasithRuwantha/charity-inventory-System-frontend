@@ -173,7 +173,7 @@ export default function CategoriesPage() {
                     <TD>
                       <DropdownMenu
                         trigger={
-                          <button className="rounded-md p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700">
+                          <button className="rounded-[10px] p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700">
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         }

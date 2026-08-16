@@ -9,7 +9,7 @@ export function NotAuthorizedPage() {
         <ShieldAlert className="h-6 w-6 text-rose-500" />
       </div>
       <div>
-        <h1 className="font-display text-2xl font-bold text-ink-900">Access restricted</h1>
+        <h1 className="text-2xl font-bold tracking-[-0.02em] text-ink-900">Access restricted</h1>
         <p className="mt-1.5 max-w-sm text-sm text-ink-500">
           Your role doesn't have permission to view this page. Contact an administrator if you believe this is a mistake.
         </p>

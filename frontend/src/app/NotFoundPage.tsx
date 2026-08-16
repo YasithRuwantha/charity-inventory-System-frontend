@@ -9,7 +9,7 @@ export function NotFoundPage() {
         <CompassIcon className="h-6 w-6 text-ink-400" />
       </div>
       <div>
-        <h1 className="font-display text-2xl font-bold text-ink-900">Page not found</h1>
+        <h1 className="text-2xl font-bold tracking-[-0.02em] text-ink-900">Page not found</h1>
         <p className="mt-1.5 text-sm text-ink-500">The page you're looking for doesn't exist or was moved.</p>
       </div>
       <Link to="/">

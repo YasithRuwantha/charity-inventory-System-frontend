@@ -62,7 +62,7 @@ export function AllocateDialog({ open, onClose, distribution }: { open: boolean;
         {distribution.items.map((item) => {
           const insufficient = item.availableQuantity < item.requestedQuantity;
           return (
-            <div key={item.id} className="rounded-lg border border-ink-200 p-3">
+            <div key={item.id} className="rounded-[10px] border border-ink-200 p-3">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium text-ink-900">{item.itemName}</p>
