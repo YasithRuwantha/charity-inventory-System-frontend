@@ -21,7 +21,7 @@ npm run dev
 
 The app runs at `http://localhost:5173` and expects the backend at `http://localhost:8080` (configurable via `VITE_API_BASE_URL` in `.env`).
 
-Before starting, make sure the backend is running — see its README for setup (MySQL, `JAVA_HOME` pointed at a JDK 17 install, `mvnw spring-boot:run`). Register a user via the app's **Create an account** link, or `POST /api/v1/auth/register` directly, to get your first login.
+Before starting, make sure the backend is running — see its README for setup (MySQL, `JAVA_HOME` pointed at a JDK 17 install, `mvnw spring-boot:run`). Sign in with the seeded admin (`admin@charity.local` / `Admin@123`), or register as Inventory Staff / Volunteer via **Create an account**. Administrator accounts cannot be created through signup.
 
 ## Roles
 

@@ -8,5 +8,6 @@ public class RegisterRequest {
     private String name;
     private String email;
     private String password;
-    private UserRole role; // ADMIN, INVENTORY_STAFF, or VOLUNTEER
+    /** Self-service roles only: INVENTORY_STAFF or VOLUNTEER. ADMIN is rejected by AuthService. */
+    private UserRole role;
 }

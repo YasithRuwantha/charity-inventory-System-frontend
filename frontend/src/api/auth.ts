@@ -10,7 +10,8 @@ export interface RegisterPayload {
   name: string;
   email: string;
   password: string;
-  role: Role;
+  /** Self-service signup only — ADMIN accounts are seeded / assigned by an existing admin. */
+  role: Exclude<Role, "ADMIN">;
 }
 
 export interface AuthResponse {

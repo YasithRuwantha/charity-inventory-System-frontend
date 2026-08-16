@@ -18,7 +18,8 @@ public class AuthController {
 
     /**
      * POST /api/v1/auth/register
-     * Body: { "name": "...", "email": "...", "password": "...", "role": "ADMIN|INVENTORY_STAFF|VOLUNTEER" }
+     * Body: { "name": "...", "email": "...", "password": "...", "role": "INVENTORY_STAFF|VOLUNTEER" }
+     * Administrator accounts cannot be created here — use the bootstrap seeder or an existing ADMIN.
      */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {

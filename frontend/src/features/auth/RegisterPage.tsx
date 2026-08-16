@@ -16,7 +16,7 @@ const schema = z.object({
   name: z.string().min(2, "Enter your full name"),
   email: z.string().min(1, "Email is required").email("Enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
-  role: z.enum(["ADMIN", "INVENTORY_STAFF", "VOLUNTEER"]),
+  role: z.enum(["INVENTORY_STAFF", "VOLUNTEER"]),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -104,7 +104,6 @@ export function RegisterPage() {
               <Select id="role" {...field}>
                 <option value="INVENTORY_STAFF">Inventory Staff</option>
                 <option value="VOLUNTEER">Volunteer</option>
-                <option value="ADMIN">Administrator</option>
               </Select>
             )}
           />

@@ -361,6 +361,10 @@ Business settings:
 | `charity.organization.address` / `.contact` | *(empty)* | Receipt header details |
 | `charity.cors.allowed-origins` | `*` | Comma-separated origins, or `*` |
 | `charity.seed.default-categories` | `true` | Seeds Food, Clothing, Medicine, Hygiene, Education, Household, Other on first start. Existing rows are never modified |
+| `charity.seed.admin.enabled` | `true` | Creates a bootstrap ADMIN if the email below is not already present |
+| `charity.seed.admin.email` | `admin@charity.local` | Bootstrap administrator email |
+| `charity.seed.admin.password` | `Admin@123` | Bootstrap administrator password (change after first login) |
+| `charity.seed.admin.name` | `System Administrator` | Display name for the seeded admin |
 
 Example:
 
@@ -405,6 +409,10 @@ Authentication is the project's original JWT implementation and is unchanged. En
 `/api/v1/auth`.
 
 ### 1. Register
+
+Self-service registration accepts `INVENTORY_STAFF` or `VOLUNTEER` only. `ADMIN` is rejected —
+use the bootstrap seeder (`admin@charity.local` / `Admin@123` by default) or promote a user via
+`PATCH /api/users/{id}/role`.
 
 ```http
 POST /api/v1/auth/register

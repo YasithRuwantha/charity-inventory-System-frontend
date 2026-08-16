@@ -67,6 +67,20 @@ class AuthenticationIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @DisplayName("Self-registration cannot create an ADMIN account")
+    void registerRejectsAdminRole() throws Exception {
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(Map.of("name", "Would Be Admin", "email", "self.admin@charity.test",
+                                "password", PASSWORD, "role", "ADMIN"))))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value(
+                        "Administrator accounts cannot be created through registration"));
+
+        assertThat(userRepository.findByEmail("self.admin@charity.test")).isEmpty();
+    }
+
+    @Test
     @DisplayName("A wrong password is rejected and no token is issued")
     void invalidCredentialsRejected() throws Exception {
         mockMvc.perform(post("/api/v1/auth/login")
